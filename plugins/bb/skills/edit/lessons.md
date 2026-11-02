@@ -22,3 +22,6 @@ Dated lines, one per correction. Taste belongs to the job, so read each line for
 - 2 Nov 2026: second version of that reel: "The cards are way too big... Feels tacky." But "the video of us actually talking that isn't just a showcase reel is actually pretty cool." Keep the talk, drop the plates and flash pages. (murch-0015)
 - 2 Nov 2026: taste belongs to the job. What he liked in one video doesn't carry to another: "The ad is meant to sell." An ad is judged on who it's for, the selling points, proof and a reason to buy.
 - 2 Nov 2026: a song's own structure can carry a joke: bass entry on the throw, the bar with no bass on the ask, the chorus on "No". (pearlman-0099)
+
+- 2 Nov 2026: talk-led ads have no dead space. Any pause over 100 ms goes, and so do ums and breaths. Keep only 10 ms frames louder than the 95th percentile minus 24 dB, drop quiet stretches of 60 ms or more, pad runs 18 ms, cut each run as its own in-sync shot and voice clip with 6 ms in and 12 ms out fades. Then check the voice stem with `ffmpeg -t <last word> -i stem-nat.wav -af silencedetect=noise=-40dB:d=0.1 -f null -`, and again at `noise=-30dB:d=0.05`.
+- 2 Nov 2026: a product tag stuck on screen looks cheap. Pop-ups, if any, are little drawn animations timed to the words. A visible before and after makes the strongest ad hook, so open on it and make it read on mute in frame 0.
