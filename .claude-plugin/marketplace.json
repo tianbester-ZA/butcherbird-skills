@@ -1,0 +1,12 @@
+{
+  "name": "butcherbird",
+  "description": "Butcherbird's skills for Claude Code",
+  "owner": { "name": "Butcherbird" },
+  "plugins": [
+    {
+      "name": "bb",
+      "source": "./plugins/bb",
+      "description": "Write and cut social video the Butcherbird way: reel scripts, video edits and the book library behind them."
+    }
+  ]
+}

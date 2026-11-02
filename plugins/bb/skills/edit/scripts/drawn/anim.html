@@ -1,0 +1,73 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>drawn overlay</title>
+<style>html,body{margin:0;background:transparent;width:1080px;height:1920px;overflow:hidden}svg{display:block}</style>
+</head><body>
+<svg id="s" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
+<script>
+/* Hand-drawn overlay kit. Frame 1080x1920, times in seconds on the clean master.
+   window.draw(t, mode) renders one frame; mode '45' tells scene() to keep drawings inside rows 190..1450 for the 4:5.
+   Copy this file into the job folder, swap the colours for the client's, and rewrite scene() for the footage.
+   Line boil: FPS is how often the lines re-wobble (10 reads as drawn by hand, whatever the video's frame rate).
+   Every helper takes o: {k (boil frame), id (any number, keeps a shape's wobble its own), col, fill, w, draw (0..1 how much is drawn), op}. */
+const C={ink:'#000000',bone:'#EDECE8',orange:'#EE7631',red:'#E5322D',pink:'#FF4F9A',blue:'#2A7FBF',pale:'#CFE8F7',cream:'#FFF6D6'};
+const FPS=10;
+function h(a,b,c){let x=(Math.imul(a|0,73856093))^(Math.imul(b|0,19349663))^(Math.imul(c|0,83492791));x=Math.imul(x^(x>>>13),1274126177);x^=x>>>16;return (x>>>0)/4294967296;}
+const cl=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+const pop=p=>{p=cl(p);return p<.7?1.18*(p/.7):1.18-.18*((p-.7)/.3);};
+const f1=n=>(+n).toFixed(1);
+function kf(keys,t){if(t<=keys[0][0])return keys[0].slice(1);for(let i=1;i<keys.length;i++){if(t<=keys[i][0]){const a=keys[i-1],b=keys[i],s=(t-a[0])/(b[0]-a[0]);return a.slice(1).map((v,j)=>v+(b[j+1]-v)*s);}}return keys[keys.length-1].slice(1);}
+const W=(t,a,b)=>t>=a&&t<b;
+function hand(pts,o){const id=o.id||1,k=o.k||0,amp=o.amp??3,wob=o.wob??3.5;let P=[];
+  for(let i=0;i<pts.length-1;i++){const [x1,y1]=pts[i],[x2,y2]=pts[i+1];const d=Math.hypot(x2-x1,y2-y1);const n=Math.max(1,Math.ceil(d/45));for(let j=0;j<n;j++){const s=j/n;P.push([x1+(x2-x1)*s,y1+(y2-y1)*s]);}}
+  P.push(pts[pts.length-1]);if(o.close)P.push(pts[0]);
+  P=P.map(([x,y],i)=>[x+(h(id,0,i)-.5)*2*wob+(h(id,k+1,i)-.5)*2*amp,y+(h(id,0,i+99)-.5)*2*wob+(h(id,k+1,i+99)-.5)*2*amp]);
+  if(o.close)P[P.length-1]=P[0];
+  let d=`M${f1(P[0][0])} ${f1(P[0][1])}`;for(let i=1;i<P.length-1;i++){d+=`Q${f1(P[i][0])} ${f1(P[i][1])} ${f1((P[i][0]+P[i+1][0])/2)} ${f1((P[i][1]+P[i+1][1])/2)}`;}
+  const L=P[P.length-1];d+=`L${f1(L[0])} ${f1(L[1])}`;const draw=o.draw??1;
+  return `<path d="${d}" fill="${o.fill||'none'}" stroke="${o.col||'none'}" stroke-width="${o.w||6}" stroke-linecap="round" stroke-linejoin="round"${draw<1?` pathLength="1" stroke-dasharray="1" stroke-dashoffset="${(1-draw).toFixed(3)}"`:''}${o.op!=null?` opacity="${f1(o.op)}"`:''}/>`;}
+function circ(cx,cy,r,n=22,a0=-Math.PI/2,turns=1){const P=[];for(let i=0;i<=n;i++){const a=a0+turns*2*Math.PI*i/n;P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}return P;}
+function star4(cx,cy,r,rin=.28,rot=0){const P=[];for(let i=0;i<8;i++){const a=rot+Math.PI*i/4-Math.PI/2,rr=i%2?r*rin:r;P.push([cx+rr*Math.cos(a),cy+rr*Math.sin(a)]);}return P;}
+function glint(cx,cy,r,o){if(r<2)return '';return hand(star4(cx,cy,r,.22,(o.rot||0)),{...o,close:true,fill:o.fill||C.cream,wob:1.5,amp:1.5});}
+function sparkle(cx,cy,r,o){if(r<2)return '';let s='';for(let i=0;i<4;i++){const a=(o.rot||0)+i*Math.PI/4;const rr=i%2?r*.55:r;s+=hand([[cx-rr*Math.cos(a),cy-rr*Math.sin(a)],[cx+rr*Math.cos(a),cy+rr*Math.sin(a)]],{...o,id:o.id+i,amp:1.5,wob:1.5});}return s;}
+function heart(cx,cy,s,o){const P=[];for(let i=0;i<=24;i++){const t=Math.PI*2*i/24;P.push([cx+s*Math.pow(Math.sin(t),3)*1.05,cy-s*(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t))/16]);}return hand(P,{...o,close:true});}
+function drop(cx,cy,s,o){const P=[[cx,cy-s],[cx+s*.55,cy+s*.15],[cx+s*.5,cy+s*.6],[cx,cy+s*.95],[cx-s*.5,cy+s*.6],[cx-s*.55,cy+s*.15]];return hand(P,{...o,close:true});}
+function blush(cx,cy,o){let s='';const L=o.len||14;for(let i=-1;i<=1;i++)s+=hand([[cx+i*16-L*.7,cy-L],[cx+i*16+L*.7,cy+L]],{...o,id:o.id+i+1,amp:1.5,wob:1.5});return s;}
+function gloom(x,y,w,o){let s='';const n=o.n||5;const p=o.draw??1;for(let i=0;i<n;i++){const xx=x+i*w/(n-1),len=(o.len||100)+h(o.id,i,2)*50;const pi=cl((p-(i*.12))/.5);if(pi<=0)continue;s+=hand([[xx,y],[xx,y+len]],{...o,id:o.id+i,amp:2,draw:pi});}return s;}
+function focusLines(o){const k=o.k||0,n=o.n||26;let s='';const sides=o.sides||[0,1,2,3];const cx=o.cx??540,cy=o.cy??960;
+  for(let i=0;i<n;i++){const side=sides[i%sides.length],u=h(o.id,k,i),len=(o.min||110)+h(o.id,k,i+50)*(o.var||170);let x,y;
+    if(side==0){x=u*1080;y=0;if(o.xskip&&x<o.xskip)continue;}else if(side==1){x=1080;y=u*1920;}else if(side==2){x=u*1080;y=1920;}else{x=0;y=u*1920;}
+    if(o.ymax&&y>o.ymax)continue;const a=Math.atan2(cy-y,cx-x),dx=Math.cos(a),dy=Math.sin(a);const r0=30+h(o.id,k,i+90)*40;
+    const ex=x+dx*(r0+len),ey=y+dy*(r0+len);if(o.avoid&&o.avoid.some(([ax0,ay0,ax1,ay1])=>(ex>ax0&&ex<ax1&&ey>ay0&&ey<ay1)||(x+dx*r0>ax0&&x+dx*r0<ax1&&y+dy*r0>ay0&&y+dy*r0<ay1)))continue;
+    s+=hand([[x+dx*r0,y+dy*r0],[x+dx*(r0+len),y+dy*(r0+len)]],{...o,id:o.id+i,amp:0,wob:2,w:(o.w||9)*(.6+h(o.id,k,i+20)*.8)});}
+  return s;}
+function hLines(o){const k=o.k||0,n=o.n||6;let s='';for(let i=0;i<n;i++){const y=(o.y0||0)+h(o.id,k,i)*((o.y1||1920)-(o.y0||0)),x=(o.x0||0)+h(o.id,k,i+40)*300,len=(o.len0||200)+h(o.id,k,i+80)*(o.len1||350);s+=hand([[x,y],[x+len,y]],{...o,id:o.id+i,amp:0,wob:1.5,w:(o.w||7)*(.5+h(o.id,k,i+20))});}return s;}
+function retroSun(cx,cy,r,o){let s='';const bands=[[-1,-.55],[-.49,-.15],[-.09,.2],[.26,.5],[.56,.74],[.8,.92]];const p=o.draw??1;
+  bands.forEach((b,i)=>{const bi=bands.length-1-i;if(bi/bands.length>=p)return;const y0=b[0]*r,y1=b[1]*r;const a0=Math.asin(cl(y0/r,-1,1)),a1=Math.asin(cl(y1/r,-1,1));const P=[];const nn=10;
+    for(let j=0;j<=nn;j++){const a=a0+(a1-a0)*j/nn;P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}for(let j=nn;j>=0;j--){const a=Math.PI-(a0+(a1-a0)*j/nn);P.push([cx+r*Math.cos(a),cy+r*Math.sin(a)]);}
+    const col=i<3?C.orange:(i<5?C.red:C.pink);s+=hand(P,{...o,id:o.id+i*3,close:true,fill:col,col:col,w:4,amp:2,wob:2});});return s;}
+function arrow(pts,o){const n=pts.length,[x1,y1]=pts[n-2],[x2,y2]=pts[n-1];const a=Math.atan2(y2-y1,x2-x1),L=o.head||26;let s=hand(pts,o);
+  if((o.draw??1)>.85){s+=hand([[x2-L*Math.cos(a-.5),y2-L*Math.sin(a-.5)],[x2,y2]],{...o,id:o.id+1,draw:1});s+=hand([[x2-L*Math.cos(a+.5),y2-L*Math.sin(a+.5)],[x2,y2]],{...o,id:o.id+2,draw:1});}return s;}
+function burst(cx,cy,r,n,o){let s='';for(let i=0;i<n;i++){const a=i*2*Math.PI/n+(h(o.id,i,3)-.5)*.3;const r1=r*.45,r2=r*(.9+h(o.id,i,4)*.3);s+=hand([[cx+r1*Math.cos(a),cy+r1*Math.sin(a)],[cx+r2*Math.cos(a),cy+r2*Math.sin(a)]],{...o,id:o.id+i});}return s;}
+function qmark(cx,cy,s,o){return hand([[cx-s*.45,cy-s*.55],[cx-s*.2,cy-s*.9],[cx+s*.3,cy-s*.9],[cx+s*.5,cy-s*.5],[cx+s*.25,cy-s*.15],[cx,cy+s*.1],[cx,cy+s*.4]],{...o,id:o.id})+hand(circ(cx,cy+s*.8,s*.09,8),{...o,id:o.id+1,close:true,fill:o.col});}
+function wash(col,op){return `<rect x="0" y="0" width="1080" height="1920" fill="${col}" opacity="${op}"/>`;}
+function brackets(k,p,o,y0,y1){let s='';const I=70,L=110;[[I,y0,1,1],[1080-I,y0,-1,1],[1080-I,y1,-1,-1],[I,y1,1,-1]].forEach(([x,y,dx,dy],i)=>{s+=hand([[x,y+dy*L],[x,y],[x+dx*L,y]],{...o,id:o.id+i,draw:p});});return s;}
+
+/* A track for something that moves: [time, x, y]. Get real ones from track.py or by reading frames. */
+const follow=[[0,300,700],[1,420,640],[2,620,620],[3,760,700]];
+
+/* ---- the example scene: delete this and write your own, one block per gag, timed to a word or a bar ---- */
+function scene(t,k,m45){let s='';const o={k};const top=m45?240:70,bottom=m45?1450:1850;
+/* 0.0: focus lines snap in on the hook, kept off the area in avoid: [x0,y0,x1,y1] */
+  if(W(t,0,.6))s+=focusLines({...o,col:C.orange,id:100,n:30,cx:540,cy:800,sides:[0,1,3],ymax:1300,min:110,var:170,avoid:[[340,500,740,1000]]});
+/* 0.7: a glint that follows the thing */
+  if(W(t,.7,1.2)){const [x,y]=kf(follow,t);const p=(t-.7)/.5;s+=glint(x,y-80,44*Math.sin(p*Math.PI),{...o,col:C.orange,fill:C.cream,w:4,id:120,rot:p*.8});}
+/* 1.2: a heart pops, then floats */
+  if(W(t,1.2,2)){const p=cl((t-1.2)/.3);s+=`<g transform="translate(540 500) scale(${f1(pop(p))}) translate(-540 -500)">${heart(540,500-(t-1.2)*60,80,{...o,col:C.pink,fill:C.pink,w:5,id:200})}</g>`;}
+/* 2.0: gloom lines and a sweat drop on the let-down */
+  if(W(t,2,3)){const p=cl((t-2)/.5);s+=gloom(430,top+140,220,{...o,col:C.blue,w:8,id:300,draw:p,len:90});s+=drop(700,560+(t-2)*60,38,{...o,col:C.blue,fill:C.pale,w:4,id:310});}
+/* 2.5: frame brackets draw on */
+  if(W(t,2.5,3))s+=brackets(k,cl((t-2.5)/.3),{...o,col:C.orange,w:9,id:400},top,bottom);
+  return s;}
+window.draw=function(t,mode){const k=Math.floor(t*FPS+1e-6);document.getElementById('s').innerHTML=scene(t,k,mode==='45');return new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(()=>r(true))));};
+</script></body></html>

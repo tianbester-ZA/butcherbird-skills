@@ -1,0 +1,9 @@
+{
+  "name": "bb",
+  "displayName": "Butcherbird",
+  "description": "Write and cut social video the Butcherbird way: reel scripts, video edits and the book library behind them.",
+  "author": {
+    "name": "Butcherbird"
+  },
+  "repository": "https://github.com/tianbester-ZA/butcherbird-skills"
+}

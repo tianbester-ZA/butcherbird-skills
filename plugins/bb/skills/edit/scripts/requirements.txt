@@ -1,0 +1,10 @@
+# The Python tools behind listen.py and mix.py, pinned so an upstream release can't break a teammate's Mac.
+# setup.py builds these in the plugin's data folder and rebuilds when this file changes.
+# Change PYTHONS in setup.py if you move these: the newest Python often has no wheels for the pins yet.
+numpy==2.4.6
+scipy==1.17.1
+librosa==0.11.0
+soundfile==0.14.0
+matplotlib==3.11.2
+pillow==13.0.0
+ai-edge-litert==2.3.0

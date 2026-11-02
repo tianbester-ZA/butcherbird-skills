@@ -1,0 +1,46 @@
+{
+  "jobs": {
+    "want": ["desire","desires","want","wants","mass desire","craving","longing","dream","wish","motive","motives","emotion","emotional","hopes","fears","hunger","urge","appetite","aspiration"],
+    "awareness": ["awareness","unaware","most aware","product aware","problem aware","stage of awareness","sophistication","market sophistication","prospect knows","already know","gradation","unidentified need","new mechanism","claim","enlarge"],
+    "offer": ["offer","offers","guarantee","bonus","bonuses","price","pricing","discount","risk reversal","free trial","premium","value equation","urgency","scarcity","deadline","limited","irresistible","bundle","payment plan","money back","money-back","order now","special offer","call to action","coupon"],
+    "proof": ["proof","prove","proven","testimonial","testimonials","evidence","demonstration","demonstrate","credibility","believable","skeptical","sceptical","social proof","case study","endorsement","authority","statistics","test results","documented","verified","believe","believability","expert"],
+    "hook": ["headline","headlines","hook","hooks","opening","first line","lead","attention","curiosity","stop the reader","grab","capture attention","benefit","news","arouse","intrigue","irresistible","bullets","fascinations","subject line","first sentence","surprise"],
+    "shape": ["structure","story","stories","narrative","outline","framework","sequence","arc","beginning","middle","end","flow","organize","plot","hero","villain","guide","plan","message","simple","concrete","unexpected","emotional","credible","sticky","one idea","big idea","theme"],
+    "feel": ["emotion","emotional","feel","feeling","feelings","mood","tone","empathy","audience","reaction","intuition","heart","tension","release","suspense","atmosphere","engage","moment","performance","laugh","cry","sad","joy"],
+    "rhythm": ["rhythm","rhythmic","pace","pacing","tempo","beat","beats","cut","cuts","cutting","timing","cadence","pulse","syncopation","blink","transition","duration","trajectory","speed","length of shot","hold","when to cut","edit point","cutting point"],
+    "eye": ["eye","eyes","frame","framing","composition","contrast","space","depth","line","lines","focus","attention","gaze","look","visual","shot","shots","tone","color","colour","shape","movement","rule of thirds","foreground","background","screen","viewer","image"]
+  },
+  "min_hits": 3,
+  "job_expansions": {
+    "want": ["desire","need","craving","motive","longing","emotion"],
+    "awareness": ["aware","stage","sophistication","market","mechanism","claim"],
+    "offer": ["guarantee","bonus","price","urgency","scarcity","deadline","limited","risk"],
+    "proof": ["proof","evidence","testimonial","demonstration","credibility","guarantee","believable"],
+    "hook": ["headline","attention","curiosity","opening","benefit","news"],
+    "shape": ["structure","story","outline","sequence","simple","framework"],
+    "feel": ["emotion","feeling","mood","tension","empathy","reaction"],
+    "rhythm": ["rhythm","pace","timing","cut","beat","tempo","duration"],
+    "eye": ["eye","frame","composition","contrast","focus","space","depth","gaze"]
+  },
+  "synonyms": {
+    "prove": ["proof","evidence","demonstrate","testimonial","guarantee","credibility"],
+    "sceptical": ["skeptical","doubt","disbelief","believable","credibility"],
+    "skeptical": ["sceptical","doubt","disbelief","believable","credibility"],
+    "buyer": ["customer","prospect","reader","consumer"],
+    "claim": ["promise","statement","assertion"],
+    "stops": ["arrest","attention","grab","stop"],
+    "stop": ["arrest","attention","grab"],
+    "headline": ["headlines","title","hook","opening"],
+    "urgency": ["urgent","deadline","immediate","hurry","limited","now"],
+    "scarcity": ["scarce","limited","rare","shortage","running out","few"],
+    "deadline": ["expires","expire","limited","closing","last day"],
+    "cut": ["cutting","edit","transition","blink"],
+    "shot": ["shots","frame","image","scene"],
+    "rhythm": ["pace","pacing","tempo","timing","beat"],
+    "emotion": ["feeling","emotional","mood"],
+    "eye": ["gaze","look","attention","focus","viewer"],
+    "frame": ["framing","composition","screen","image"],
+    "go": ["move","travel","directed","drawn"]
+  },
+  "stopwords": ["a","an","and","are","as","at","be","been","but","by","can","do","does","for","from","had","has","have","how","i","if","in","into","is","it","its","me","my","of","on","or","our","should","so","than","that","the","their","them","then","there","these","they","this","to","was","we","were","what","when","where","which","who","why","will","with","would","you","your"]
+}
