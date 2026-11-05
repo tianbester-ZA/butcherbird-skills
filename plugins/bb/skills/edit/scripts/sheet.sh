@@ -10,14 +10,11 @@ set -e
 v="$1"; [ -f "$v" ] || { echo "usage: sheet.sh video.mp4 [strip_start] [strip_len] [out_dir]"; exit 2; }
 ss="${2:-0}"; sl="${3:-3}"
 d=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$v")
-wh=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 "$v" | head -1)
-w=${wh%,*}; h=${wh#*,}
-tw=216; th=$(( 216 * h / w / 2 * 2 ))
 stem="${v%.*}"
 if [ -n "$4" ]; then mkdir -p "$4"; b="${v:t}"; stem="$4/${b%.*}"; fi
 # 40 evenly spaced frames: one in the middle of each 1/40th of the cut
 rate=$(python3 -c "print(40/($d*0.985))")
-ffmpeg -nostdin -v error -y -i "$v" -vf "fps=${rate}:start_time=$(python3 -c "print($d/80)"),scale=$tw:$th,tile=8x5:padding=4:margin=4:color=0x202020" -frames:v 1 -q:v 3 "$stem-sheet.jpg"
+ffmpeg -nostdin -v error -y -i "$v" -vf "fps=${rate}:start_time=$(python3 -c "print($d/80)"),scale=216:-2,tile=8x5:padding=4:margin=4:color=0x202020" -frames:v 1 -q:v 3 "$stem-sheet.jpg"
 python3 -c "
 d=$d
 print('sheet frames, left to right, top to bottom (seconds):')
