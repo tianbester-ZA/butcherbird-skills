@@ -2,6 +2,10 @@
 
 Newest first, in plain words. Every commit to `main` reaches everyone, so write here when something changes how a skill works.
 
+## 10 Nov 2026
+
+- New `/bb:review`: check work against the store before a client sees it, a senior (Tian or Roy) signs off, a 5-day review timeline, and client feedback turned into a list that gets fully done in one round.
+
 ## 2 Nov 2026
 
 - First release to the team: `/bb:script`, `/bb:edit`, `/bb:books`.

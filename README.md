@@ -1,12 +1,13 @@
 # Butcherbird skills
 
-Butcherbird's way of writing and cutting social video, as skills for Claude Code. Install it once, and it stays up to date on its own.
+Butcherbird's way of writing, cutting and checking client work, as skills for Claude Code. Install it once, and it stays up to date on its own.
 
 | Type this | It does this |
 |---|---|
 | `/bb:script` | Writes a shoot pack: scripts for ads and reels, checked against the books and a separate critic |
 | `/bb:edit` | Cuts raw footage into finished 9:16 and 4:5 videos with sound, on your Mac |
 | `/bb:books` | Tells you what 17 advertising and editing books say about a question |
+| `/bb:review` | Checks work before it reaches a client, and turns their feedback into a list that gets done |
 
 ## Install
 
@@ -79,6 +80,16 @@ Answer these properly. You hold the context, and what you say here is what makes
 **Example:** `/bb:books does a discount need a reason`
 
 The other two skills use it for every decision.
+
+## /bb:review
+
+**Use it for:** anything going to a client for review or going live (videos, statics, emails, pages, ad copy), and whenever a client sends feedback or sends work back. Also for planning a review timeline or preparing a call about feedback.
+
+**What you get:** before sending, a one-page check sheet: every piece and size checked against the store (code, percentage, which products, dates, stock claims), the same claim everywhere, spelling, brand, the signed-off script and the technical bits, each with proof. When feedback lands, a numbered list in the client's own words, each line sorted, owned and ticked with proof before it goes back.
+
+**Who signs off:** a senior, Tian or Roy, never the person who made it. Claude prepares; nothing is sent without that yes.
+
+**Example:** `/bb:review the Black Friday statics and emails before they go`
 
 ## What it needs on your Mac
 
