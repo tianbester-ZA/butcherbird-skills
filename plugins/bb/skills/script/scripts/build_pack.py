@@ -14,7 +14,16 @@ sys.path.insert(0, str(HERE))
 from packmd import is_edit, parse  # noqa: E402
 
 ASSETS = HERE.parent / "assets"
-CHROME = os.environ.get("CHROME_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+def find_chrome():
+    """Copy-free headless Chrome first: every launch of the Chrome app leaves a 1.4 GB code_sign_clone copy on disk."""
+    import glob
+    c = [os.environ.get("CHROME_PATH"), os.environ.get("CHROME_BIN"), os.path.expanduser("~/.local/bin/chrome-headless")]
+    c += sorted(glob.glob(os.path.expanduser("~/Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-mac-*/chrome-headless-shell")), reverse=True)
+    c.append("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    return next((p for p in c if p and os.path.exists(p)), c[-1])
+
+
+CHROME = find_chrome()
 
 
 def bold(s):

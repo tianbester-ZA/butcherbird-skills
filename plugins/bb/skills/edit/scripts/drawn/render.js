@@ -8,16 +8,24 @@ const [,, page, outdir, fpsS, durS, mode='916', startS='0', endS=''] = process.a
 const FPS = +fpsS, DUR = +durS, W = 1080, H = 1920;
 const start = Math.round(+startS * FPS), end = endS ? Math.round(+endS * FPS) : Math.round(DUR * FPS);
 fs.mkdirSync(outdir, {recursive: true});
-const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+// Copy-free headless Chrome first: every launch of the Chrome app leaves a 1.4 GB code_sign_clone copy on disk.
+const CHROME = (() => {
+  const home = require('os').homedir(), pw = path.join(home, 'Library/Caches/ms-playwright');
+  const shells = fs.existsSync(pw) ? fs.readdirSync(pw).filter(d => d.startsWith('chromium_headless_shell-')).sort().reverse()
+    .flatMap(d => ['arm64', 'x64'].map(a => path.join(pw, d, `chrome-headless-shell-mac-${a}`, 'chrome-headless-shell'))) : [];
+  const c = [process.env.CHROME_PATH, process.env.CHROME_BIN, path.join(home, '.local/bin/chrome-headless'), ...shells,
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'];
+  return c.find(p => p && fs.existsSync(p)) || c[c.length - 1];
+})();
 if (!fs.existsSync(CHROME)) { console.error('no Chrome at ' + CHROME + ': install Google Chrome or set CHROME_PATH'); process.exit(1); }
 if (typeof WebSocket === 'undefined') { console.error('render.js needs Node 22 or newer: brew install node'); process.exit(1); }
 const port = 9333 + Math.floor(Math.random() * 500);
 const chrome = spawn(CHROME, ['--headless=new', `--remote-debugging-port=${port}`, '--disable-gpu', '--hide-scrollbars', `--window-size=${W},${H}`,
-  '--no-first-run', '--no-default-browser-check', '--user-data-dir=' + fs.mkdtempSync(path.join(require('os').tmpdir(), 'bb-drawn-chrome-'))], {stdio: 'ignore'});
+  '--no-first-run', '--no-default-browser-check', '--user-data-dir=' + fs.mkdtempSync(path.join(require('os').tmpdir(), 'bb-drawn-chrome-')), 'about:blank'], {stdio: 'ignore'});
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 (async () => {
   let targets = null;
-  for (let i = 0; i < 50 && !targets; i++) { await sleep(200); try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); } catch (e) {} }
+  for (let i = 0; i < 50 && !(targets && targets.some(t => t.type === 'page')); i++) { await sleep(200); try { targets = await (await fetch(`http://127.0.0.1:${port}/json`)).json(); } catch (e) {} }
   if (!targets) throw new Error('chrome did not start');
   const pageT = targets.find(t => t.type === 'page');
   const ws = new WebSocket(pageT.webSocketDebuggerUrl);

@@ -27,7 +27,16 @@ MODELS = {
     "yamnet.tflite": ("https://storage.googleapis.com/mediapipe-models/audio_classifier/yamnet/float32/latest/yamnet.tflite", 4_126_810),
 }
 LARGE = {"ggml-large-v3-turbo.bin": ("https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-large-v3-turbo.bin", 1_624_555_275)}
-CHROME = os.environ.get("CHROME_PATH", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+def find_chrome():
+    """Copy-free headless Chrome first: every launch of the Chrome app leaves a 1.4 GB code_sign_clone copy on disk."""
+    import glob
+    c = [os.environ.get("CHROME_PATH"), os.environ.get("CHROME_BIN"), os.path.expanduser("~/.local/bin/chrome-headless")]
+    c += sorted(glob.glob(os.path.expanduser("~/Library/Caches/ms-playwright/chromium_headless_shell-*/chrome-headless-shell-mac-*/chrome-headless-shell")), reverse=True)
+    c.append("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+    return next((p for p in c if p and os.path.exists(p)), c[-1])
+
+
+CHROME = find_chrome()
 BREW_HINT = "" if shutil.which("brew") else " (no Homebrew yet: install it first from https://brew.sh)"
 
 
@@ -235,7 +244,7 @@ def check_models(rep, data, a):
 
 def check_optional(rep):
     if os.path.exists(CHROME):
-        rep.ok("google chrome", "for the PDF shoot pack and drawn animation")
+        rep.ok("chrome", f"for the PDF shoot pack and drawn animation ({os.path.basename(CHROME)})")
     else:
         rep.optional("google chrome", "only for the PDF shoot pack and drawn animation. Install from https://www.google.com/chrome")
     words = out(["node", "--version"]).strip().lstrip("v").split(".")
