@@ -6,6 +6,7 @@ Butcherbird's way of writing, cutting and checking client work, as skills for Cl
 |---|---|
 | `/bb:script` | Writes a shoot pack: scripts for ads and reels, checked against the books and a separate critic |
 | `/bb:edit` | Cuts raw footage into finished 9:16 and 4:5 videos with sound, on your Mac |
+| `/bb:statics` | Makes static ads and carousels in 9:16, 4:5 and 1:1, with the real product and editable files |
 | `/bb:books` | Tells you what 17 advertising and editing books say about a question |
 | `/bb:review` | Checks work before it reaches a client, and turns their feedback into a list that gets done |
 
@@ -31,7 +32,7 @@ The check happens at a random moment in the first ten minutes after your first m
 
 ## /bb:script
 
-**Use it for:** scripts, hooks, a shoot pack, ad concepts, reel ideas, UGC or creator briefs, founder videos, skits, re-hooking a tired ad, words for footage already shot, or working out why a script feels flat. Not for static ads, emails or landing pages.
+**Use it for:** scripts, hooks, a shoot pack, ad concepts, reel ideas, UGC or creator briefs, founder videos, skits, re-hooking a tired ad, words for footage already shot, or working out why a script feels flat. Not for emails or landing pages. Static ads are `/bb:statics`.
 
 **What it asks:** it reads what it can first (the client's winners, personas, reviews, past ads, the live product and offer), says it back to you, and asks only what's missing, usually two or three of these. Then it works to the end without stopping.
 1. Who should this ad move, what should they picture for themselves, and what should they do straight after watching?
@@ -73,6 +74,29 @@ Answer these properly. You hold the context, and what you say here is what makes
 
 **Taste belongs to the job.** What someone liked in one video doesn't carry to another. An ad is meant to sell, so it's judged on who it's for, the selling points, proof and a reason to buy, not on the jokes or feel of an organic reel. Both skills, and their critics, judge against the job you set.
 
+## /bb:statics
+
+**Use it for:** static ads, image ads, carousels, a sale or Black Friday set, resizing statics to 4:5 or 1:1, fixing garbled text on a generated product, or files a designer can open and edit in VectorCraft, Illustrator or Figma.
+
+**Who does what:** you own the idea, the lines and the picture. Claude does the rest and checks it: builds each ad from the client's brand kit, lays the real product photo over any generated one so every label word is right, lays out each size properly, checks each against the layout rules, and exports editable files.
+
+**What it asks:** it reads the brief, the brand kit and past winners first, says it back, then asks only what's missing:
+1. What's the offer, exactly? Spend levels, what's free, what it's worth.
+2. How many ads, which sizes, any carousels? By when?
+3. Where are the brand kit and the client's photos? Which past ads passed?
+
+**What you get:** two or three rough options to pick from, then each ad as 1080x1920, 1080x1350 and 1080x1080 PNGs on a contact sheet, and an editable SVG per ad with named layers (picture, each product, logo, live text in the brand fonts). Every file is checked: the layout against the rules, every label word read at zoom, and the editable file opened the way VectorCraft will open it.
+
+**Example:**
+
+> `/bb:statics three Black Friday statics for Fynn socks, buy one get two free`
+>
+> *Here's what I've got: buy one pair, get two more free, worth R480; the kit's in the Fynn folder. Missing: which past ads passed, and do you want a carousel?*
+>
+> You answer in a line. It shows three rough ideas, you pick, and it comes back with the set in three sizes and the editable files.
+
+**Learning it:** [the statics workflow](plugins/bb/skills/statics/references/workflow.md) walks through all six steps with a worked example (the invented Fynn brand). Read it once before your first job; it explains the tools as it goes.
+
 ## /bb:books
 
 **Use it for:** what the books say about a hook, an offer, proof, urgency, pricing, a guarantee, rhythm, or anything else you're arguing about. It answers in a few lines with the passage ids, says where the books disagree, and says when they don't speak to it.
@@ -110,6 +134,12 @@ To check by hand, run this and read each line:
 
 ```
 python3 "$(ls -td ~/.claude/plugins/cache/butcherbird/bb/*/ | head -1)skills/edit/scripts/setup.py" --data ~/.claude/plugins/data/bb-butcherbird
+```
+
+`/bb:statics` needs Google Chrome and Node (`brew install node`); it installs its Chrome driver itself the first time. VectorCraft, the free editor for the files, is optional and it offers to install it. It checks each time it starts:
+
+```
+python3 "$(ls -td ~/.claude/plugins/cache/butcherbird/bb/*/ | head -1)skills/statics/scripts/setup.py" --data ~/.claude/plugins/data/bb-butcherbird
 ```
 
 ## Your work and your clients

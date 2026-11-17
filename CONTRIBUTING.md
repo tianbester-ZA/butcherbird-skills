@@ -7,6 +7,7 @@
 ```
 plugins/bb/skills/script/   /bb:script
 plugins/bb/skills/edit/     /bb:edit
+plugins/bb/skills/statics/  /bb:statics, with a worked example in examples/fynn/
 plugins/bb/skills/books/    /bb:books, and the notes and cards behind it
 scripts/check.py            the checks that run on every push
 ```

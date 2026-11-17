@@ -2,6 +2,10 @@
 
 Newest first, in plain words. Every commit to `main` reaches everyone, so write here when something changes how a skill works.
 
+## 17 Nov 2026
+
+- New `/bb:statics`: static ads and carousels in 9:16, 4:5 and 1:1, built in code from a client's brand kit. Real packshots laid over generated products so labels are exact, jobs started with new-job (practice or client kit), a layout gate that prints the number to change, editable SVGs for VectorCraft, Illustrator or Figma with an export check, a numbered delivery folder, and a worked example with an invented brand.
+
 ## 10 Nov 2026
 
 - New `/bb:review`: check work against the store before a client sees it, a senior (Tian or Roy) signs off, a 5-day review timeline, and client feedback turned into a list that gets fully done in one round.

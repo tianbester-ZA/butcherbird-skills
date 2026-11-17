@@ -1,0 +1,14 @@
+{
+  "name": "Fynn (invented brand for the worked example)",
+  "fonts": {
+    "headline":  { "file": "../../../../edit/assets/fonts/Geist-Black.ttf", "postscript": "Geist-Black" },
+    "offer":     { "file": "../../../../edit/assets/fonts/PlayfairDisplay-Italic.otf", "postscript": "PlayfairDisplay-Italic" },
+    "offerBold": { "file": "../../../../edit/assets/fonts/Geist-Bold.ttf", "postscript": "Geist-Bold" }
+  },
+  "logos": { "light": "logos/fynn-light.svg", "dark": "logos/fynn-dark.svg" },
+  "ink": { "light": "#FFFFFF", "dark": "#14110F" },
+  "background": "#16100D",
+  "headline": { "case": "upper", "lineHeight": 0.88, "tracking": "-0.01em" },
+  "rules": {},
+  "notes": "A real kit lives in the client's own folder, never in this repo. See references/brand-kit.md."
+}

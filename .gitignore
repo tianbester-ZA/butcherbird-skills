@@ -14,6 +14,7 @@ venv/
 *.m4a
 renders/
 final/
+plugins/bb/skills/statics/examples/*/out/
 
 # Book text and models never go in here either.
 *.pdf
